@@ -52,8 +52,8 @@ function updateTotalGrade() {
   const gradeTwo = Number(inputs.gradeTwo.value);
   const coefBulgarian = Number(inputs.coefBulgarian.value);
   const coefMath = Number(inputs.coefMath.value);
-  if (!validScore(bulgarian) || !validScore(math) || !validCoefficient(coefBulgarian) || !validCoefficient(coefMath)) {
-    inputs.gradeValidation.textContent = 'За бала въведете НВО точки между 0 и 100 и неотрицателни коефициенти.';
+  if (!validScore(bulgarian) || !validScore(math) || !validCoefficient(coefBulgarian) || !validCoefficient(coefMath) || coefBulgarian + coefMath > 4) {
+    inputs.gradeValidation.textContent = 'За бала въведете НВО точки между 0 и 100. Коефициентите трябва да са цели числа от 1 до 3 и сборът им да е максимум 4.';
     inputs.totalGradeScore.textContent = '—';
     return;
   }
@@ -81,7 +81,7 @@ function parseBand(band) {
   return Number.isFinite(exact) ? { min: exact, max: exact } : null;
 }
 function validScore(value) { return Number.isFinite(value) && value >= 0 && value <= 100; }
-function validCoefficient(value) { return Number.isFinite(value) && value >= 0; }
+function validCoefficient(value) { return Number.isInteger(value) && value >= 1 && value <= 3; }
 function roundTo2(value) { return Math.round(value * 100) / 100; }
 function formatInt(value) { return new Intl.NumberFormat('bg-BG').format(value); }
 function formatScore(value) { return new Intl.NumberFormat('bg-BG', { maximumFractionDigits: 2 }).format(value); }
