@@ -42,7 +42,7 @@ function buildResult(metric, score, gender) {
   return { label: labels[metric], score, band: row.band, count: stat.count, above: stat.above, total, rankFrom, rankTo, topFrom: ((rankFrom / total) * 100).toFixed(1), topTo: ((rankTo / total) * 100).toFixed(1) };
 }
 function findBand(score) {
-  if (score === 0) return sourceData.rows.find(row => row.band === '0');
+  // Row 4 from the source is excluded; score 0 uses the 0 - 0.499 band.
   const targetStart = Math.floor(score * 2) / 2;
   const match = sourceData.rows.find(row => { const parsed = parseBand(row.band); return parsed && targetStart >= parsed.min && targetStart <= parsed.max; });
   return match || sourceData.rows[sourceData.rows.length - 1];
