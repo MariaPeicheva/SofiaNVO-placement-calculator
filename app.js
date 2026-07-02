@@ -13,7 +13,8 @@ const inputs = {
   coefBulgarian: document.getElementById('coefBulgarian'),
   coefMath: document.getElementById('coefMath'),
   totalGradeScore: document.getElementById('totalGradeScore'),
-  gradeValidation: document.getElementById('gradeValidation')
+  gradeValidation: document.getElementById('gradeValidation'),
+  maxGradeNote: document.getElementById('maxGradeNote')
 };
 fetch('data.json')
   .then(response => response.json())
@@ -52,6 +53,7 @@ function updateTotalGrade() {
   const gradeTwo = Number(inputs.gradeTwo.value);
   const coefBulgarian = Number(inputs.coefBulgarian.value);
   const coefMath = Number(inputs.coefMath.value);
+  updateMaxGradeNote(coefBulgarian, coefMath);
   if (!validScore(bulgarian) || !validScore(math) || !validCoefficient(coefBulgarian) || !validCoefficient(coefMath) || coefBulgarian + coefMath > 4) {
     inputs.gradeValidation.textContent = 'За бала въведете НВО точки между 0 и 100. Коефициентите трябва да са цели числа от 1 до 3 и сборът им да е максимум 4.';
     inputs.totalGradeScore.textContent = '—';
@@ -60,6 +62,15 @@ function updateTotalGrade() {
   inputs.gradeValidation.textContent = '';
   const total = bulgarian * coefBulgarian + math * coefMath + gradePoints[gradeOne] + gradePoints[gradeTwo];
   inputs.totalGradeScore.textContent = formatNumber(roundTo2(total));
+}
+function updateMaxGradeNote(coefBulgarian, coefMath) {
+  if (!inputs.maxGradeNote) return;
+  if (!validCoefficient(coefBulgarian) || !validCoefficient(coefMath) || coefBulgarian + coefMath > 4) {
+    inputs.maxGradeNote.textContent = 'макс. балът се изчислява след валидни коефициенти';
+    return;
+  }
+  const maxScore = 100 * coefBulgarian + 100 * coefMath + 50 + 50;
+  inputs.maxGradeNote.textContent = 'макс. ' + formatNumber(maxScore) + ' при коефициенти ' + coefBulgarian + ' + ' + coefMath + ' и две отлични оценки';
 }
 function buildResult(metric, score, gender) {
   const row = findBand(score);
