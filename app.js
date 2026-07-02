@@ -1,116 +1,88 @@
-<!doctype html>
-<html lang="bg">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Интерактивен калкулатор за класиране</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <main class="app">
-    <section class="hero">
-      <p class="eyebrow">НВО 7. клас · 2025/2026</p>
-      <h1>Интерактивен калкулатор за класиране и бал</h1>
-      <p>Въведете резултатите по БЕЛ и МАТ, изберете група и вижте приблизителния диапазон на класиране. По-долу може да изчислите и общия бал за кандидатстване.</p>
-    </section>
-
-    <section class="card inputs" aria-labelledby="inputs-title">
-      <h2 id="inputs-title">Входни данни за НВО</h2>
-      <div class="grid">
-        <label>Резултат по БЕЛ
-          <input id="bulgarianScore" type="number" min="0" max="100" step="0.01" value="90" />
-        </label>
-        <label>Резултат по МАТ
-          <input id="mathScore" type="number" min="0" max="100" step="0.01" value="90" />
-        </label>
-        <label>Пол / група
-          <select id="gender">
-            <option value="overall" selected>Общо</option>
-            <option value="boys">Момчета</option>
-            <option value="girls">Момичета</option>
-          </select>
-        </label>
-        <label>Сумарен резултат
-          <input id="combinedScore" type="text" readonly />
-        </label>
-      </div>
-      <p id="validation" class="validation" role="alert"></p>
-    </section>
-
-    <section class="card" aria-labelledby="results-title">
-      <h2 id="results-title">Справка за класиране</h2>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Показател</th><th>Резултат / интервал</th><th>Брой в интервала</th><th>Ученици с по-висок резултат</th><th>Диапазон на класиране</th><th>Общ брой ученици</th><th>Прибл. позиция / топ</th></tr></thead>
-          <tbody id="resultsBody"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="card total-grade" aria-labelledby="grade-title">
-      <h2 id="grade-title">Калкулатор за общ бал</h2>
-      <p class="section-intro">Точките от НВО се вземат автоматично от въведените резултати по-горе. Изберете годишните оценки и настройте коефициентите според желания профил.</p>
-      <div class="grade-layout">
-        <div class="grade-inputs">
-          <div class="grid grade-grid">
-            <label>Оценка 1-ви предмет
-              <select id="gradeOne">
-                <option value="6" selected>Отличен 6</option>
-                <option value="5">Много добър 5</option>
-                <option value="4">Добър 4</option>
-                <option value="3">Среден 3</option>
-              </select>
-            </label>
-            <label>Оценка 2-ри предмет
-              <select id="gradeTwo">
-                <option value="6" selected>Отличен 6</option>
-                <option value="5">Много добър 5</option>
-                <option value="4">Добър 4</option>
-                <option value="3">Среден 3</option>
-              </select>
-            </label>
-            <label>Коефициент БЕЛ
-              <input id="coefBulgarian" type="number" min="0" step="0.01" value="2" />
-            </label>
-            <label>Коефициент МАТ
-              <input id="coefMath" type="number" min="0" step="0.01" value="2" />
-            </label>
-          </div>
-          <p id="gradeValidation" class="validation" role="alert"></p>
-          <div class="score-card">
-            <span>Общ бал</span>
-            <strong id="totalGradeScore">—</strong>
-            <small>макс. 500 при коефициенти 2 + 2 и две отлични оценки</small>
-          </div>
-        </div>
-        <div class="scale-box">
-          <h3>Точки от годишни оценки</h3>
-          <table class="scale-table">
-            <thead><tr><th>Оценка</th><th>Точки</th></tr></thead>
-            <tbody>
-              <tr><td>Отличен 6</td><td>50</td></tr>
-              <tr><td>Много добър 5</td><td>39</td></tr>
-              <tr><td>Добър 4</td><td>26</td></tr>
-              <tr><td>Среден 3</td><td>15</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <p class="formula-note">Формула: Общ бал = БЕЛ × коеф. БЕЛ + МАТ × коеф. МАТ + точки от 1-ва годишна оценка + точки от 2-ра годишна оценка.</p>
-    </section>
-
-    <section class="card note">
-      <h2>Разчитане на справката</h2>
-      <p>Класирането е показано като диапазон, защото изходните данни са групирани в интервали от 0.5 точки. Ред 4 от източника е изключен; резултат 0 използва интервала 0 - 0.499. „Ученици с по-висок резултат“ означава броя ученици със строго по-висок резултат от избрания интервал.</p>
-    </section>
-    <section class="card note">
-      <h2>Източник на данните</h2>
-      <p>Данните са взети от <a href="https://ruo.mon.bg/sofia-grad/student-admission/podavane-na-zayavleniya-za-uchastie-v-1-etap/?fbclid=IwY2xjawSx5XBleHRuA2FlbQIxMQBzcnRjBmFwcF9pZBAyMjIwMzkxNzg4MjAwODkyAAEeikhBW2o1Je428M7jwYQyED-vYMX0Ev8wC5O_ie-ML8ZDTszAzdFtPuqTNFI_aem_QVELaS2OIgH3o71SX2aBag" target="_blank" rel="noopener noreferrer">публикация на РУО София-град</a> (1 юли 2026 г.).<br>
-        За повече информация относно този калкулатор вижте <a href="https://github.com/MariaPeicheva/SofiaNVO-placement-calculator?tab=readme-ov-fil" target="_blank" rel="noopener noreferrer">тук</a>.
-      </p>
-    </section>
-
-  </main>
-  <script src="app.js"></script>
-</body>
-</html>
+let sourceData;
+const labels = { bulgarian: 'БЕЛ', math: 'МАТ', combined: 'Сумарен резултат' };
+const gradePoints = { 6: 50, 5: 39, 4: 26, 3: 15 };
+const inputs = {
+  bulgarian: document.getElementById('bulgarianScore'),
+  math: document.getElementById('mathScore'),
+  gender: document.getElementById('gender'),
+  combined: document.getElementById('combinedScore'),
+  validation: document.getElementById('validation'),
+  body: document.getElementById('resultsBody'),
+  gradeOne: document.getElementById('gradeOne'),
+  gradeTwo: document.getElementById('gradeTwo'),
+  coefBulgarian: document.getElementById('coefBulgarian'),
+  coefMath: document.getElementById('coefMath'),
+  totalGradeScore: document.getElementById('totalGradeScore'),
+  gradeValidation: document.getElementById('gradeValidation')
+};
+fetch('data.json')
+  .then(response => response.json())
+  .then(data => { sourceData = data; update(); })
+  .catch(() => { inputs.validation.textContent = 'Данните не можаха да бъдат заредени. Проверете дали data.json е качен до index.html.'; });
+['input', 'change'].forEach(eventName => {
+  inputs.bulgarian.addEventListener(eventName, update);
+  inputs.math.addEventListener(eventName, update);
+  inputs.gender.addEventListener(eventName, update);
+  inputs.gradeOne.addEventListener(eventName, updateTotalGrade);
+  inputs.gradeTwo.addEventListener(eventName, updateTotalGrade);
+  inputs.coefBulgarian.addEventListener(eventName, updateTotalGrade);
+  inputs.coefMath.addEventListener(eventName, updateTotalGrade);
+});
+function update() {
+  const bulgarian = Number(inputs.bulgarian.value);
+  const math = Number(inputs.math.value);
+  const combined = roundTo2(bulgarian + math);
+  inputs.combined.value = Number.isFinite(combined) ? combined.toFixed(2) : '';
+  updateTotalGrade();
+  if (!sourceData) return;
+  const gender = inputs.gender.value;
+  if (!validScore(bulgarian) || !validScore(math)) {
+    inputs.validation.textContent = 'Въведете резултати между 0 и 100.';
+    inputs.body.innerHTML = '';
+    return;
+  }
+  inputs.validation.textContent = '';
+  const rows = [buildResult('bulgarian', bulgarian, gender), buildResult('math', math, gender), buildResult('combined', combined, gender)];
+  inputs.body.innerHTML = rows.map(row => '<tr><td>' + row.label + '</td><td>' + formatScore(row.score) + ' (' + row.band + ')</td><td>' + formatInt(row.count) + '</td><td>' + formatInt(row.above) + '</td><td class="rank">#' + formatInt(row.rankFrom) + '–' + formatInt(row.rankTo) + '</td><td>' + formatInt(row.total) + '</td><td>Топ ' + row.topFrom + '%–' + row.topTo + '%</td></tr>').join('');
+}
+function updateTotalGrade() {
+  const bulgarian = Number(inputs.bulgarian.value);
+  const math = Number(inputs.math.value);
+  const gradeOne = Number(inputs.gradeOne.value);
+  const gradeTwo = Number(inputs.gradeTwo.value);
+  const coefBulgarian = Number(inputs.coefBulgarian.value);
+  const coefMath = Number(inputs.coefMath.value);
+  if (!validScore(bulgarian) || !validScore(math) || !validCoefficient(coefBulgarian) || !validCoefficient(coefMath)) {
+    inputs.gradeValidation.textContent = 'За бала въведете НВО точки между 0 и 100 и неотрицателни коефициенти.';
+    inputs.totalGradeScore.textContent = '—';
+    return;
+  }
+  inputs.gradeValidation.textContent = '';
+  const total = bulgarian * coefBulgarian + math * coefMath + gradePoints[gradeOne] + gradePoints[gradeTwo];
+  inputs.totalGradeScore.textContent = formatNumber(roundTo2(total));
+}
+function buildResult(metric, score, gender) {
+  const row = findBand(score);
+  const stat = row[metric][gender];
+  const total = sourceData.totals[metric][gender];
+  const rankFrom = stat.above + 1;
+  const rankTo = stat.above + stat.count;
+  return { label: labels[metric], score, band: row.band, count: stat.count, above: stat.above, total, rankFrom, rankTo, topFrom: ((rankFrom / total) * 100).toFixed(1), topTo: ((rankTo / total) * 100).toFixed(1) };
+}
+function findBand(score) {
+  const targetStart = Math.floor(score * 2) / 2;
+  const match = sourceData.rows.find(row => { const parsed = parseBand(row.band); return parsed && targetStart >= parsed.min && targetStart <= parsed.max; });
+  return match || sourceData.rows[sourceData.rows.length - 1];
+}
+function parseBand(band) {
+  const parts = String(band).split(' - ').map(Number);
+  if (parts.length === 2 && parts.every(Number.isFinite)) return { min: parts[0], max: parts[1] };
+  const exact = Number(band);
+  return Number.isFinite(exact) ? { min: exact, max: exact } : null;
+}
+function validScore(value) { return Number.isFinite(value) && value >= 0 && value <= 100; }
+function validCoefficient(value) { return Number.isFinite(value) && value >= 0; }
+function roundTo2(value) { return Math.round(value * 100) / 100; }
+function formatInt(value) { return new Intl.NumberFormat('bg-BG').format(value); }
+function formatScore(value) { return new Intl.NumberFormat('bg-BG', { maximumFractionDigits: 2 }).format(value); }
+function formatNumber(value) { return new Intl.NumberFormat('bg-BG', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value); }
