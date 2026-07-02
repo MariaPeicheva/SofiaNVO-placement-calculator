@@ -25,51 +25,6 @@
   },
   "rows": [
     {
-      "band": "0",
-      "math": {
-        "overall": {
-          "count": 16,
-          "above": 11448
-        },
-        "boys": {
-          "count": 10,
-          "above": 5815
-        },
-        "girls": {
-          "count": 6,
-          "above": 5633
-        }
-      },
-      "bulgarian": {
-        "overall": {
-          "count": 4,
-          "above": 11472
-        },
-        "boys": {
-          "count": 2,
-          "above": 5823
-        },
-        "girls": {
-          "count": 2,
-          "above": 5649
-        }
-      },
-      "combined": {
-        "overall": {
-          "count": 0,
-          "above": 11442
-        },
-        "boys": {
-          "count": 0,
-          "above": 5808
-        },
-        "girls": {
-          "count": 0,
-          "above": 5634
-        }
-      }
-    },
-    {
       "band": "0 - 0.499",
       "math": {
         "overall": {
