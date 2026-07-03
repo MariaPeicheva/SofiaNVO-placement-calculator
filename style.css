@@ -14,6 +14,7 @@ h1 { font-size:clamp(28px,4vw,44px); line-height:1.05; }
 label { display:grid; gap:8px; font-weight:700; color:var(--muted); }
 input,select { width:100%; border:1px solid var(--border); border-radius:12px; padding:12px 14px; font-size:17px; color:var(--text); background:#fff; }
 input[readonly] { background:#eef4fc; font-weight:800; }
+.region-select { display:grid; gap:8px; max-width:320px; margin-bottom:16px; }
 .validation { min-height:22px; margin:12px 0 0; color:#b42318; font-weight:700; }
 .table-wrap { overflow-x:auto; }
 table { width:100%; border-collapse:collapse; min-width:920px; }

@@ -2,13 +2,21 @@ let sourceData;
 const labels = { bulgarian: 'БЕЛ', math: 'МАТ', combined: 'Сумарен резултат' };
 const gradePoints = { 6: 50, 5: 39, 4: 26, 3: 15 };
 const gradeLabels = { 6: 'Отличен 6', 5: 'Много добър 5', 4: 'Добър 4', 3: 'Среден 3' };
+const datasets = [
+  { id: 'sofia', name: 'София-град', file: 'datasets/data-sofia.json', sourceUrl: 'https://ruo.mon.bg/sofia-grad/student-admission/podavane-na-zayavleniya-za-uchastie-v-1-etap/', sourceLabel: 'публикация на РУО София-град' },
+  { id: 'varna', name: 'Варна', file: 'datasets/data-varna.json', sourceUrl: 'https://ruo-varna.bg/index.php?option=com_content&view=article&id=240&Itemid=195', sourceLabel: 'публикация на РУО Варна' }
+];
+const dataCache = {};
 const inputs = {
+  region: document.getElementById('region'),
   bulgarian: document.getElementById('bulgarianScore'),
   math: document.getElementById('mathScore'),
   gender: document.getElementById('gender'),
   combined: document.getElementById('combinedScore'),
   validation: document.getElementById('validation'),
   body: document.getElementById('resultsBody'),
+  resultsTitle: document.getElementById('results-title'),
+  sourceNote: document.getElementById('sourceNote'),
   gradeOne: document.getElementById('gradeOne'),
   gradeTwo: document.getElementById('gradeTwo'),
   coefBulgarian: document.getElementById('coefBulgarian'),
@@ -17,11 +25,10 @@ const inputs = {
   gradeValidation: document.getElementById('gradeValidation'),
   maxGradeNote: document.getElementById('maxGradeNote')
 };
-fetch('data.json')
-  .then(response => response.json())
-  .then(data => { sourceData = data; update(); })
-  .catch(() => { inputs.validation.textContent = 'Данните не можаха да бъдат заредени. Проверете дали data.json е качен до index.html.'; });
+inputs.region.innerHTML = datasets.map((dataset, index) => '<option value="' + dataset.id + '"' + (index === 0 ? ' selected' : '') + '>' + dataset.name + '</option>').join('');
+loadRegion(datasets[0].id);
 ['input', 'change'].forEach(eventName => {
+  inputs.region.addEventListener(eventName, () => loadRegion(inputs.region.value));
   inputs.bulgarian.addEventListener(eventName, update);
   inputs.math.addEventListener(eventName, update);
   inputs.gender.addEventListener(eventName, update);
@@ -30,6 +37,24 @@ fetch('data.json')
   inputs.coefBulgarian.addEventListener(eventName, syncCoefMathFromBulgarian);
   inputs.coefMath.addEventListener(eventName, updateTotalGrade);
 });
+function loadRegion(regionId) {
+  const dataset = datasets.find(item => item.id === regionId) || datasets[0];
+  const applyData = data => { sourceData = data; renderRegionMeta(dataset); update(); };
+  if (dataCache[dataset.id]) { applyData(dataCache[dataset.id]); return; }
+  sourceData = undefined;
+  inputs.body.innerHTML = '';
+  inputs.validation.textContent = 'Данните се зареждат…';
+  fetch(dataset.file)
+    .then(response => response.json())
+    .then(data => { dataCache[dataset.id] = data; applyData(data); })
+    .catch(() => { inputs.validation.textContent = 'Данните за ' + dataset.name + ' не можаха да бъдат заредени. Проверете дали ' + dataset.file + ' е качен до index.html.'; });
+}
+function renderRegionMeta(dataset) {
+  inputs.resultsTitle.textContent = 'Справка за класиране – ' + dataset.name;
+  if (inputs.sourceNote && dataset.sourceUrl) {
+    inputs.sourceNote.innerHTML = 'Данните за ' + dataset.name + ' са взети от <a href="' + dataset.sourceUrl + '" target="_blank" rel="noopener noreferrer">' + dataset.sourceLabel + '</a>.<br>За повече информация относно този калкулатор вижте <a href="https://github.com/MariaPeicheva/SofiaNVO-placement-calculator?tab=readme-ov-fil" target="_blank" rel="noopener noreferrer">тук</a>.';
+  }
+}
 function syncCoefMathFromBulgarian() {
   const coefBulgarian = Number(inputs.coefBulgarian.value);
   if (validCoefficient(coefBulgarian)) {
