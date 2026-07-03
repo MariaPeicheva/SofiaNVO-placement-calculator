@@ -1,6 +1,7 @@
 let sourceData;
 const labels = { bulgarian: 'БЕЛ', math: 'МАТ', combined: 'Сумарен резултат' };
 const gradePoints = { 6: 50, 5: 39, 4: 26, 3: 15 };
+const gradeLabels = { 6: 'Отличен 6', 5: 'Много добър 5', 4: 'Добър 4', 3: 'Среден 3' };
 const inputs = {
   bulgarian: document.getElementById('bulgarianScore'),
   math: document.getElementById('mathScore'),
@@ -26,9 +27,16 @@ fetch('data.json')
   inputs.gender.addEventListener(eventName, update);
   inputs.gradeOne.addEventListener(eventName, updateTotalGrade);
   inputs.gradeTwo.addEventListener(eventName, updateTotalGrade);
-  inputs.coefBulgarian.addEventListener(eventName, updateTotalGrade);
+  inputs.coefBulgarian.addEventListener(eventName, syncCoefMathFromBulgarian);
   inputs.coefMath.addEventListener(eventName, updateTotalGrade);
 });
+function syncCoefMathFromBulgarian() {
+  const coefBulgarian = Number(inputs.coefBulgarian.value);
+  if (validCoefficient(coefBulgarian)) {
+    inputs.coefMath.value = String(4 - coefBulgarian);
+  }
+  updateTotalGrade();
+}
 function update() {
   const bulgarian = Number(inputs.bulgarian.value);
   const math = Number(inputs.math.value);
@@ -53,9 +61,9 @@ function updateTotalGrade() {
   const gradeTwo = Number(inputs.gradeTwo.value);
   const coefBulgarian = Number(inputs.coefBulgarian.value);
   const coefMath = Number(inputs.coefMath.value);
-  updateMaxGradeNote(coefBulgarian, coefMath);
-  if (!validScore(bulgarian) || !validScore(math) || !validCoefficient(coefBulgarian) || !validCoefficient(coefMath) || coefBulgarian + coefMath > 4) {
-    inputs.gradeValidation.textContent = 'За бала въведете НВО точки между 0 и 100. Коефициентите трябва да са цели числа от 1 до 3 и сборът им да е максимум 4.';
+  updateGradeNote(coefBulgarian, coefMath, gradeOne, gradeTwo);
+  if (!validScore(bulgarian) || !validScore(math) || !validCoefficient(coefBulgarian) || !validCoefficient(coefMath) || coefBulgarian + coefMath !== 4) {
+    inputs.gradeValidation.textContent = 'Коефициентите трябва да са цели числа от 1 до 3 и сборът им да е точно 4.';
     inputs.totalGradeScore.textContent = '—';
     return;
   }
@@ -63,14 +71,16 @@ function updateTotalGrade() {
   const total = bulgarian * coefBulgarian + math * coefMath + gradePoints[gradeOne] + gradePoints[gradeTwo];
   inputs.totalGradeScore.textContent = formatNumber(roundTo2(total));
 }
-function updateMaxGradeNote(coefBulgarian, coefMath) {
+function updateGradeNote(coefBulgarian, coefMath, gradeOne, gradeTwo) {
   if (!inputs.maxGradeNote) return;
-  if (!validCoefficient(coefBulgarian) || !validCoefficient(coefMath) || coefBulgarian + coefMath > 4) {
-    inputs.maxGradeNote.textContent = 'макс. балът се изчислява след валидни коефициенти';
+  if (!validCoefficient(coefBulgarian) || !validCoefficient(coefMath) || coefBulgarian + coefMath !== 4 || !gradePoints[gradeOne] || !gradePoints[gradeTwo]) {
+    inputs.maxGradeNote.textContent = 'балът се изчислява след валидни коефициенти и оценки';
     return;
   }
-  const maxScore = 100 * coefBulgarian + 100 * coefMath + 50 + 50;
-  inputs.maxGradeNote.textContent = 'макс. ' + formatNumber(maxScore) + ' при коефициенти ' + coefBulgarian + ' + ' + coefMath + ' и две отлични оценки';
+  const certificatePoints = gradePoints[gradeOne] + gradePoints[gradeTwo];
+  const maxExamPoints = 100 * coefBulgarian + 100 * coefMath;
+  const maxScore = maxExamPoints + certificatePoints;
+  inputs.maxGradeNote.textContent = 'макс. ' + formatNumber(maxScore) + ' при коефициенти ' + coefBulgarian + ' + ' + coefMath + ' и годишни оценки ' + gradeLabels[gradeOne] + ' + ' + gradeLabels[gradeTwo];
 }
 function buildResult(metric, score, gender) {
   const row = findBand(score);
