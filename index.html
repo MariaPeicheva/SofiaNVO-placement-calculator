@@ -102,13 +102,19 @@
     <section class="card exact-admission" aria-labelledby="programs-title">
       <h2 id="programs-title">Топ 10 паралелки според точния бал</h2>
       <p class="section-intro">Този списък използва формулата за балообразуване за всяка паралелка от системата на МОН Инфоприем и минималните балове от таблицата на РУО София към дата 14.07.2026 г.</p>
+      <div class="student-gender-radio" role="radiogroup" aria-label="Пол на ученика" title="Полът се използва само при паралелки с квоти, където има отделни минимални балове за момчета и момичета.">
+        <span>Пол:</span>
+        <label><input type="radio" name="studentGender" value="boys" checked /> М</label>
+        <label><input type="radio" name="studentGender" value="girls" /> Ж</label>
+      </div>
+      <p class="hint gender-help">Полът се използва само за паралелки с квоти; за паралелки без квоти се сравнява с общия минимален бал.</p>
       <div class="quota-radio" role="radiogroup" aria-label="Филтър по квоти">
         <label><input type="radio" name="quotaFilter" value="all" checked /> Всички</label>
         <label><input type="radio" name="quotaFilter" value="quotas" /> Само с квоти</label>
         <label><input type="radio" name="quotaFilter" value="noQuotas" /> Само без квоти</label>
       </div>
       <details class="diploma-details" open>
-        <summary>Годишни оценки и специални резултати за точния бал</summary>
+        <summary>Въвеждане на оценки от специални предмети</summary>
         <p class="hint">Оценките се превръщат в точки по скалата 6=50, 5=39, 4=26, 3=15. За паралелки със специален изпит/олимпиада попълнете съответния резултат; иначе остава 0.</p>
         <div class="program-input-layout">
           <div><h3>Годишни оценки</h3><div id="annualSubjectInputs" class="mini-grid"></div></div>
@@ -117,10 +123,11 @@
       </details>
       <div class="table-wrap">
         <table class="program-table">
-          <thead><tr><th>№</th><th>Училище</th><th>Паралелка</th><th>Квоти</th><th>Точен бал</th><th>Мин. бал</th><th>Разлика</th><th>Код</th></tr></thead>
+          <thead><tr><th>№</th><th>Училище</th><th>Паралелка</th><th>Квоти</th><th>Бал по формула</th><th>Мин. бал</th><th>Разлика</th><th>Формула</th><th>Код</th></tr></thead>
           <tbody id="programResultsBody"></tbody>
         </table>
       </div>
+      <button id="showMorePrograms" class="show-more" type="button">Покажи още</button>
     </section>
 
     <section class="card note">
