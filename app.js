@@ -63,8 +63,9 @@ function validateProgramShape(data) {
 });
 document.querySelectorAll('input[name="quotaFilter"]').forEach(radio => radio.addEventListener('change', () => { resetProgramCount(); updatePrograms(); }));
 document.querySelectorAll('input[name="studentGender"]').forEach(radio => radio.addEventListener('change', () => { resetProgramCount(); updatePrograms(); }));
-if (inputs.showMorePrograms) inputs.showMorePrograms.addEventListener('click', () => { visibleProgramCount += 10; updatePrograms(); });
+if (inputs.showMorePrograms) inputs.showMorePrograms.addEventListener('click', handleShowMorePrograms);
 function resetProgramCount() { visibleProgramCount = 10; }
+function handleShowMorePrograms(event) { if (event && event.preventDefault) event.preventDefault(); visibleProgramCount += 10; updatePrograms(); }
 function syncCoefMathFromBulgarian() {
   const coefBulgarian = Number(inputs.coefBulgarian.value);
   if (validCoefficient(coefBulgarian)) inputs.coefMath.value = String(4 - coefBulgarian);
@@ -139,18 +140,28 @@ function updatePrograms() {
   const bulgarian = Number(inputs.bulgarian.value); const math = Number(inputs.math.value);
   if (!validScore(bulgarian) || !validScore(math)) return;
   const gender = inputs.gender.value;
-"  const selected = document.querySelector('input[name=""quotaFilter""]:checked');
-  const selectedStudentGender = document.querySelector('input[name=""studentGender""]:checked');
-  const studentGender = selectedStudentGender ? selectedStudentGender.value : 'boys';"
+  const selected = document.querySelector('input[name="quotaFilter"]:checked');
+  const selectedStudentGender = document.querySelector('input[name="studentGender"]:checked');
+  const studentGender = selectedStudentGender ? selectedStudentGender.value : 'boys';
   const filter = selected ? selected.value : 'all';
-  const programs = sourceData.programs.map(program => { const score = scoreProgram(program.formula, bulgarian, math); const cutoffKey = program.quotas === 'Quotas' ? studentGender : 'overall'; const cutoff = Number((program.min && (program.min[cutoffKey] || program.min.overall))); return { ...program, score, cutoff, margin: score - cutoff }; })
+  const programs = sourceData.programs.map(program => { const score = scoreProgram(program.formula, bulgarian, math); const hasQuota = isQuota(program.quotas); const cutoffKey = hasQuota ? studentGender : 'overall'; const cutoff = Number((program.min && (program.min[cutoffKey] || program.min.overall))); return { ...program, score, cutoff, margin: score - cutoff }; })
     .filter(program => Number.isFinite(program.cutoff) && program.margin >= 0)
-    .filter(program => filter === 'all' || (filter === 'quotas' ? program.quotas === 'Quotas' : program.quotas === 'No quotas'))
+    .filter(program => filter === 'all' || (filter === 'quotas' ? isQuota(program.quotas) : isNoQuota(program.quotas)))
     .sort((a, b) => b.cutoff - a.cutoff);
-  if (!programs.length) { inputs.programResultsBody.innerHTML = '<tr><td colspan="9">Няма паралелки, които отговарят на избрания филтър и текущия бал.</td></tr>'; if (inputs.showMorePrograms) inputs.showMorePrograms.hidden = true; return; }
-"  const visiblePrograms = programs.slice(0, visibleProgramCount);
-  inputs.programResultsBody.innerHTML = visiblePrograms.map(program => '<tr><td>' + escapeHtml(program.rankNo) + '</td><td>' + escapeHtml(program.school) + '</td><td>' + escapeHtml(program.program) + '</td><td>' + escapeHtml(formatQuota(program.quotas)) + '</td><td>' + formatNumber(roundTo2(program.score)) + '</td><td>' + formatNumber(program.cutoff) + '</td><td>' + formatNumber(roundTo2(program.margin)) + '</td><td class=""formula-cell"">' + escapeHtml(program.formula) + '</td><td>' + escapeHtml(program.code) + '</td></tr>').join('');
-  if (inputs.showMorePrograms) { inputs.showMorePrograms.hidden = visibleProgramCount >= programs.length; inputs.showMorePrograms.textContent = 'Покажи още (' + Math.min(10, programs.length - visibleProgramCount) + ')'; }"
+  if (!programs.length) { inputs.programResultsBody.innerHTML = '<tr><td colspan="9">Няма паралелки, които отговарят на избрания филтър и текущия бал.</td></tr>'; if (inputs.showMorePrograms) { inputs.showMorePrograms.hidden = true; inputs.showMorePrograms.disabled = true; } return; }
+  const visiblePrograms = programs.slice(0, visibleProgramCount);
+  inputs.programResultsBody.innerHTML = visiblePrograms.map(program => '<tr>' +
+    '<td>' + escapeHtml(program.rankNo) + '</td>' +
+    '<td>' + escapeHtml(program.school) + '</td>' +
+    '<td>' + escapeHtml(program.program) + '</td>' +
+    '<td>' + escapeHtml(formatQuota(program.quotas)) + '</td>' +
+    '<td>' + formatNumber(roundTo2(program.score)) + '</td>' +
+    '<td>' + formatNumber(program.cutoff) + '</td>' +
+    '<td>' + formatNumber(roundTo2(program.margin)) + '</td>' +
+    '<td class="formula-cell">' + escapeHtml(program.formula || '—') + '</td>' +
+    '<td>' + escapeHtml(program.code) + '</td>' +
+    '</tr>').join('');
+  if (inputs.showMorePrograms) { const remaining = Math.max(0, programs.length - visibleProgramCount); inputs.showMorePrograms.hidden = false; inputs.showMorePrograms.disabled = remaining === 0; inputs.showMorePrograms.textContent = remaining === 0 ? 'Показани са всички ' + programs.length + ' резултата' : 'Покажи още (' + Math.min(10, remaining) + ')'; }
 }
 function scoreProgram(method, bulgarian, math) { const alternatives = String(method || '').split(/\s+или\s+/i).map(text => text.trim()).filter(Boolean); return Math.max(...alternatives.map(text => scoreAlternative(text, bulgarian, math)), 0); }
 function scoreAlternative(text, bulgarian, math) { const groups = [...String(text).matchAll(/\(([^()]*)\)/g)].map(match => match[1]); return sumTerms(groups[0] || text, 'exam', bulgarian, math) + sumTerms(groups.slice(1).join(' + '), 'annual', bulgarian, math); }
@@ -165,5 +176,7 @@ function roundTo2(value) { return Math.round(value * 100) / 100; }
 function formatInt(value) { return new Intl.NumberFormat('bg-BG').format(value); }
 function formatScore(value) { return new Intl.NumberFormat('bg-BG', { maximumFractionDigits: 2 }).format(value); }
 function formatNumber(value) { return new Intl.NumberFormat('bg-BG', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value); }
-function formatQuota(value) { return value === 'Quotas' ? 'С квоти' : value === 'No quotas' ? 'Без квоти' : value; }
+function isQuota(value) { return value === 'С квоти' || value === 'Quotas'; }
+function isNoQuota(value) { return value === 'Без квоти' || value === 'No quotas'; }
+function formatQuota(value) { return isQuota(value) ? 'С квоти' : isNoQuota(value) ? 'Без квоти' : value; }
 function escapeHtml(value) { return String(value ?? '').replace(/[&<>"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[char])); }
