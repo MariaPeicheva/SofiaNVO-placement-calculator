@@ -48,3 +48,9 @@ td.rank { font-weight:800; color:var(--blue-dark); }
 .mini-grid label { display: grid; gap: 0.3rem; font-weight: 700; color: #173b68; }
 .program-table td:nth-child(5), .program-table td:nth-child(6), .program-table td:nth-child(7) { text-align: right; white-space: nowrap; }
 @media (max-width: 760px) { .program-input-layout, .mini-grid { grid-template-columns: 1fr; } }
+.student-gender-radio { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin: 1rem 0 0.25rem; font-weight: 800; color: #173b68; }
+.student-gender-radio label { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.55rem 0.8rem; border: 1px solid #c9d7ea; border-radius: 999px; background: #f7fbff; font-weight: 700; }
+.show-more { margin-top: 0.85rem; padding: 0.7rem 1rem; border: 0; border-radius: 10px; background: #1f5fbf; color: white; font-weight: 800; cursor: pointer; }
+.show-more[hidden] { display: none; }
+.formula-cell { max-width: 280px; white-space: normal; color: #536170; font-size: 0.9em; }
+.gender-help { margin-top: 0.25rem; }
