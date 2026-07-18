@@ -11,7 +11,7 @@
     <section class="hero">
       <p class="eyebrow">НВО 7. клас · 2025/2026</p>
       <h1>Интерактивен калкулатор за класиране и бал</h1>
-      <p>Въведете резултатите по БЕЛ и МАТ, изберете група и вижте приблизителния диапазон на класиране. По-долу може да изчислите и общия бал за кандидатстване.</p>
+      <p>Въведете резултатите по БЕЛ и МАТ от НВО, изберете група и вижте приблизително място (диапазон) сред кандидатите в обл. София-град. По-долу можете да изчислите и общия бал за кандидатстване, както и да видите в кои топ паралелки може да се влезе с въведените резултати.</p>
     </section>
 
     <section class="card inputs" aria-labelledby="inputs-title">
@@ -44,6 +44,10 @@
           <thead><tr><th>Показател</th><th>Резултат / интервал</th><th>Брой в интервала</th><th>Ученици с по-висок резултат</th><th>Диапазон на класиране</th><th>Общ брой ученици</th><th>Прибл. позиция / топ</th></tr></thead>
           <tbody id="resultsBody"></tbody>
         </table>
+      </div>
+      <div class="inline-note">
+        <h3>Разчитане на справката</h3>
+        <p>Класирането е показано като диапазон, защото изходните данни са групирани в интервали от 0.5 точки. „Ученици с по-висок резултат“ означава броя ученици със строго по-висок резултат от избрания интервал.</p>
       </div>
     </section>
 
@@ -79,7 +83,7 @@
 
     <section class="card exact-admission" aria-labelledby="programs-title">
       <h2 id="programs-title">Класиране в топ 10 паралелки</h2>
-      <p class="section-intro">Списъкът по-долу използва формулата за балообразуване за всяка паралелка от системата на МОН Инфоприем и минималните балове от таблицата на РУО София за 1-во класиране към дата 14.07.2026 г.</p>
+      <p class="section-intro">Списъкът по-долу използва формулата за балообразуване за всяка паралелка от системата на МОН Инфоприем и минималните балове от <a href="https://ruo.mon.bg/sofia-grad/student-admission/spravka-za-minimalniya-i-maksimalniya-bal-po-paralelki-v-ruo-sofiya-grad-kam-data-14-07-2026-g/" target="_blank" rel="noopener noreferrer">таблицата на РУО София за 1-во класиране към дата 14.07.2026 г.</a></p>
       <p class="hint disclaimer">Важно: данните и минималните балове могат да се променят при следващите класирания.</p>
       <div class="filter-panel" aria-label="Филтри за паралелките">
         <div class="segmented-group" role="radiogroup" aria-label="Пол на ученика" title="Полът се използва само при паралелки с квоти, където има отделни минимални балове за момчета и момичета.">
@@ -107,8 +111,7 @@
       <button id="showMorePrograms" class="show-more" type="button">Покажи още</button>
     </section>
 
-    <section class="card note"><h2>Разчитане на справката</h2><p>Класирането е показано като диапазон, защото изходните данни са групирани в интервали от 0.5 точки. „Ученици с по-висок резултат“ означава броя ученици със строго по-висок резултат от избрания интервал.</p></section>
-    <section class="card note"><h2>Източник на данните</h2><p>Данните за баловете (успеваемост) са взети от <a href="https://ruo.mon.bg/sofia-grad/student-admission/podavane-na-zayavleniya-za-uchastie-v-1-etap/?fbclid=IwY2xjawSx5XBleHRuA2FlbQIxMQBzcnRjBmFwcF9pZBAyMjIwMzkxNzg4MjAwODkyAAEeikhBW2o1Je428M7jwYQyED-vYMX0Ev8wC5O_ie-ML8ZDTszAzdFtPuqTNFI_aem_QVELaS2OIgH3o71SX2aBag" target="_blank" rel="noopener noreferrer">публикация на РУО София-град</a> (1 юли 2026 г.).<br>Паралелките и формулите са от системата на МОН <strong>Инфоприем</strong>; минималните балове са от <strong>таблицата на РУО София</strong> към дата 14.07.2026 г.<br>За повече информация относно този калкулатор вижте <a href="https://github.com/MariaPeicheva/SofiaNVO-placement-calculator?tab=readme-ov-fil" target="_blank" rel="noopener noreferrer">тук</a>.</p></section>
+    <section class="card note"><h2>Източник на данните</h2><p>Данните за баловете (успеваемост) са взети от <a href="https://ruo.mon.bg/sofia-grad/student-admission/podavane-na-zayavleniya-za-uchastie-v-1-etap/?fbclid=IwY2xjawSx5XBleHRuA2FlbQIxMQBzcnRjBmFwcF9pZBAyMjIwMzkxNzg4MjAwODkyAAEeikhBW2o1Je428M7jwYQyED-vYMX0Ev8wC5O_ie-ML8ZDTszAzdFtPuqTNFI_aem_QVELaS2OIgH3o71SX2aBag" target="_blank" rel="noopener noreferrer">публикация на РУО София-град</a> (1 юли 2026 г.).<br>Паралелките и формулите са от системата на МОН <strong>Инфоприем</strong>; минималните балове са от <a href="https://ruo.mon.bg/sofia-grad/student-admission/spravka-za-minimalniya-i-maksimalniya-bal-po-paralelki-v-ruo-sofiya-grad-kam-data-14-07-2026-g/" target="_blank" rel="noopener noreferrer"><strong>таблицата на РУО София</strong> към дата 14.07.2026 г.</a><br>За повече информация относно този калкулатор вижте <a href="https://github.com/MariaPeicheva/SofiaNVO-placement-calculator?tab=readme-ov-fil" target="_blank" rel="noopener noreferrer">тук</a>.</p></section>
   </main>
   <script src="app.js"></script>
 </body>
