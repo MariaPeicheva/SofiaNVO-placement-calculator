@@ -23,7 +23,7 @@
         <label>Резултат по МАТ
           <input id="mathScore" type="number" min="0" max="100" step="0.25" value="" />
         </label>
-        <label>Пол / група
+        <label>Пол / група за НВО справката
           <select id="gender">
             <option value="overall" selected>Общо</option>
             <option value="boys">Момчета</option>
@@ -54,46 +54,24 @@
         <div class="grade-inputs">
           <div class="grid grade-grid">
             <label>Оценка 1-ви предмет
-              <select id="gradeOne">
-                <option value="6" selected>Отличен 6</option>
-                <option value="5">Много добър 5</option>
-                <option value="4">Добър 4</option>
-                <option value="3">Среден 3</option>
-              </select>
+              <select id="gradeOne"><option value="6" selected>Отличен 6</option><option value="5">Много добър 5</option><option value="4">Добър 4</option><option value="3">Среден 3</option></select>
             </label>
             <label>Оценка 2-ри предмет
-              <select id="gradeTwo">
-                <option value="6" selected>Отличен 6</option>
-                <option value="5">Много добър 5</option>
-                <option value="4">Добър 4</option>
-                <option value="3">Среден 3</option>
-              </select>
+              <select id="gradeTwo"><option value="6" selected>Отличен 6</option><option value="5">Много добър 5</option><option value="4">Добър 4</option><option value="3">Среден 3</option></select>
             </label>
             <label>Коефициент БЕЛ
               <input id="coefBulgarian" type="number" min="1" max="3" step="1" value="2" />
             </label>
             <label>Коефициент МАТ
-              <input id="coefMath" type="number" min="1" max="3" step="1" value="2" />
+              <input id="coefMath" type="number" min="1" max="3" step="1" value="2" readonly />
             </label>
           </div>
           <p id="gradeValidation" class="validation" role="alert"></p>
-          <div class="score-card">
-            <span>Общ бал</span>
-            <strong id="totalGradeScore">—</strong>
-            <small id="maxGradeNote">макс. 500 при коефициенти 2 + 2 и годишни оценки Отличен 6 + Отличен 6</small>
-          </div>
+          <div class="score-card"><span>Общ бал</span><strong id="totalGradeScore">—</strong><small id="maxGradeNote">макс. 500 при коефициенти 2 + 2 и годишни оценки Отличен 6 + Отличен 6</small></div>
         </div>
         <div class="scale-box">
           <h3>Точки от годишни оценки</h3>
-          <table class="scale-table">
-            <thead><tr><th>Оценка</th><th>Точки</th></tr></thead>
-            <tbody>
-              <tr><td>Отличен 6</td><td>50</td></tr>
-              <tr><td>Много добър 5</td><td>39</td></tr>
-              <tr><td>Добър 4</td><td>26</td></tr>
-              <tr><td>Среден 3</td><td>15</td></tr>
-            </tbody>
-          </table>
+          <table class="scale-table"><thead><tr><th>Оценка</th><th>Точки</th></tr></thead><tbody><tr><td>Отличен 6</td><td>50</td></tr><tr><td>Много добър 5</td><td>39</td></tr><tr><td>Добър 4</td><td>26</td></tr><tr><td>Среден 3</td><td>15</td></tr></tbody></table>
         </div>
       </div>
       <p class="formula-note">Формула: Общ бал = БЕЛ × коеф. БЕЛ + МАТ × коеф. МАТ + точки от 1-ва годишна оценка + точки от 2-ра годишна оценка.</p>
@@ -116,6 +94,7 @@
           <label><input type="radio" name="quotaFilter" value="noQuotas" /><span>Без квоти</span></label>
         </div>
       </div>
+      <p class="hint gender-help">Полът се използва само за паралелки с квоти; за паралелки без квоти се сравнява с общия минимален бал.</p>
       <details class="diploma-details">
         <summary>Въвеждане на оценки от специални предмети</summary>
         <p class="hint">Оценките се превръщат в точки по скалата 6=50, 5=39, 4=26, 3=15. За паралелки със специален изпит/олимпиада попълнете съответния резултат; иначе остава 0.</p>
@@ -124,27 +103,12 @@
           <div><h3>Спец. резултати</h3><div id="specialScoreInputs" class="mini-grid"></div></div>
         </div>
       </details>
-      <div class="table-wrap">
-        <table class="program-table">
-          <thead><tr><th>№</th><th>Училище</th><th>Паралелка</th><th>Квоти</th><th>Бал по формула</th><th>Мин. бал</th><th>Разлика</th><th>Формула</th><th>Код</th></tr></thead>
-          <tbody id="programResultsBody"></tbody>
-        </table>
-      </div>
-      <button id="showMorePrograms" class="show-more" type="button" onclick="handleShowMorePrograms(event)">Покажи още</button>
+      <div class="table-wrap"><table class="program-table"><thead><tr><th>№</th><th>Училище</th><th>Паралелка</th><th>Квоти</th><th>Бал по формула</th><th>Мин. бал</th><th>Разлика</th><th>Формула</th><th>Код</th></tr></thead><tbody id="programResultsBody"></tbody></table></div>
+      <button id="showMorePrograms" class="show-more" type="button">Покажи още</button>
     </section>
 
-    <section class="card note">
-      <h2>Разчитане на справката</h2>
-      <p>Класирането е показано като диапазон, защото изходните данни са групирани в интервали от 0.5 точки. „Ученици с по-висок резултат“ означава броя ученици със строго по-висок резултат от избрания интервал.</p>
-    </section>
-    <section class="card note">
-      <h2>Източник на данните</h2>
-      <p>Данните за баловете (успеваемост) са взети от <a href="https://ruo.mon.bg/sofia-grad/student-admission/podavane-na-zayavleniya-za-uchastie-v-1-etap/?fbclid=IwY2xjawSx5XBleHRuA2FlbQIxMQBzcnRjBmFwcF9pZBAyMjIwMzkxNzg4MjAwODkyAAEeikhBW2o1Je428M7jwYQyED-vYMX0Ev8wC5O_ie-ML8ZDTszAzdFtPuqTNFI_aem_QVELaS2OIgH3o71SX2aBag" target="_blank" rel="noopener noreferrer">публикация на РУО София-град</a> (1 юли 2026 г.).<br>
-        Паралелките и формулите са от системата на МОН <strong>Инфоприем</strong>; минималните балове са от <strong>таблицата на РУО София</strong> към дата 14.07.2026 г.<br>
-        За повече информация относно този калкулатор вижте <a href="https://github.com/MariaPeicheva/SofiaNVO-placement-calculator?tab=readme-ov-fil" target="_blank" rel="noopener noreferrer">тук</a>.
-      </p>
-    </section>
-
+    <section class="card note"><h2>Разчитане на справката</h2><p>Класирането е показано като диапазон, защото изходните данни са групирани в интервали от 0.5 точки. „Ученици с по-висок резултат“ означава броя ученици със строго по-висок резултат от избрания интервал.</p></section>
+    <section class="card note"><h2>Източник на данните</h2><p>Данните за баловете (успеваемост) са взети от <a href="https://ruo.mon.bg/sofia-grad/student-admission/podavane-na-zayavleniya-za-uchastie-v-1-etap/?fbclid=IwY2xjawSx5XBleHRuA2FlbQIxMQBzcnRjBmFwcF9pZBAyMjIwMzkxNzg4MjAwODkyAAEeikhBW2o1Je428M7jwYQyED-vYMX0Ev8wC5O_ie-ML8ZDTszAzdFtPuqTNFI_aem_QVELaS2OIgH3o71SX2aBag" target="_blank" rel="noopener noreferrer">публикация на РУО София-град</a> (1 юли 2026 г.).<br>Паралелките и формулите са от системата на МОН <strong>Инфоприем</strong>; минималните балове са от <strong>таблицата на РУО София</strong> към дата 14.07.2026 г.<br>За повече информация относно този калкулатор вижте <a href="https://github.com/MariaPeicheva/SofiaNVO-placement-calculator?tab=readme-ov-fil" target="_blank" rel="noopener noreferrer">тук</a>.</p></section>
   </main>
   <script src="app.js"></script>
 </body>
