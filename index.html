@@ -10,8 +10,8 @@
   <main class="app">
     <section class="hero">
       <p class="eyebrow">НВО 7. клас · 2025/2026</p>
-      <h1>Интерактивен калкулатор за класиране и прием</h1>
-      <p>Въведете резултатите по БЕЛ и МАТ, годишните оценки и група. Приложението изчислява класиране по НВО и показва топ паралелки, за които се покрива минималният бал по точната формула от списъка с паралелки.</p>
+      <h1>Интерактивен калкулатор за класиране и бал</h1>
+      <p>Въведете резултатите по БЕЛ и МАТ, изберете група и вижте приблизителния диапазон на класиране. По-долу може да изчислите и общия бал за кандидатстване.</p>
     </section>
 
     <section class="card inputs" aria-labelledby="inputs-title">
@@ -41,79 +41,100 @@
       <h2 id="results-title">Справка за класиране в София</h2>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Показател</th><th>Резултат / интервал</th><th>Брой в интервала</th><th>Ученици с по-висок резултат</th><th>Диапазон</th><th>Топ</th></tr></thead>
-          <tbody id="rankRows"></tbody>
+          <thead><tr><th>Показател</th><th>Резултат / интервал</th><th>Брой в интервала</th><th>Ученици с по-висок резултат</th><th>Диапазон на класиране</th><th>Общ брой ученици</th><th>Прибл. позиция / топ</th></tr></thead>
+          <tbody id="resultsBody"></tbody>
         </table>
       </div>
-      <p class="hint">Класирането е диапазон, защото изходните данни са групирани в интервали от 0.5 точки. Ред 4 от източника е изключен.</p>
     </section>
 
-    <section class="card" aria-labelledby="score-title">
-      <h2 id="score-title">Калкулатор за бал</h2>
-      <div class="grid compact">
-        <label>Коефициент БЕЛ
-          <select id="bulgarianCoef"><option>1</option><option selected>2</option><option>3</option></select>
-        </label>
-        <label>Коефициент МАТ
-          <input id="mathCoef" type="number" value="2" readonly />
-        </label>
-        <label>Годишна оценка 1
-          <select id="gradeOne"><option value="6" selected>6</option><option value="5">5</option><option value="4">4</option><option value="3">3</option></select>
-        </label>
-        <label>Годишна оценка 2
-          <select id="gradeTwo"><option value="6" selected>6</option><option value="5">5</option><option value="4">4</option><option value="3">3</option></select>
-        </label>
-      </div>
-      <div class="score-cards">
-        <div><span>Бал с избраните коефициенти</span><strong id="generalScore">—</strong></div>
-        <div><span>Бал БЕЛ×1 + МАТ×3</span><strong id="mathWeightedScore">—</strong></div>
-      </div>
-      <p id="scoreNote" class="hint"></p>
-    </section>
-
-    <section class="card" aria-labelledby="exact-title">
-      <h2 id="exact-title">Точен бал по паралелка</h2>
-      <p class="hint">Попълнете годишните оценки по предмети. За формули с „или“ се използва по-високият резултат. Ако паралелка има допълнителен изпит/олимпиада, попълнете съответния спец. резултат.</p>
-      <div class="two-col">
-        <div>
-          <h3>Годишни оценки</h3>
-          <div id="annualInputs" class="mini-grid"></div>
+    <section class="card total-grade" aria-labelledby="grade-title">
+      <h2 id="grade-title">Калкулатор за общ бал</h2>
+      <p class="section-intro">Точките от НВО се вземат автоматично от въведените резултати по-горе. Изберете годишните оценки и посочете коефициент БЕЛ според желания профил. Коефициентът по МАТ се попълва автоматично така, че сборът да е точно 4.</p>
+      <div class="grade-layout">
+        <div class="grade-inputs">
+          <div class="grid grade-grid">
+            <label>Оценка 1-ви предмет
+              <select id="gradeOne">
+                <option value="6" selected>Отличен 6</option>
+                <option value="5">Много добър 5</option>
+                <option value="4">Добър 4</option>
+                <option value="3">Среден 3</option>
+              </select>
+            </label>
+            <label>Оценка 2-ри предмет
+              <select id="gradeTwo">
+                <option value="6" selected>Отличен 6</option>
+                <option value="5">Много добър 5</option>
+                <option value="4">Добър 4</option>
+                <option value="3">Среден 3</option>
+              </select>
+            </label>
+            <label>Коефициент БЕЛ
+              <input id="coefBulgarian" type="number" min="1" max="3" step="1" value="2" />
+            </label>
+            <label>Коефициент МАТ
+              <input id="coefMath" type="number" min="1" max="3" step="1" value="2" />
+            </label>
+          </div>
+          <p id="gradeValidation" class="validation" role="alert"></p>
+          <div class="score-card">
+            <span>Общ бал</span>
+            <strong id="totalGradeScore">—</strong>
+            <small id="maxGradeNote">макс. 500 при коефициенти 2 + 2 и годишни оценки Отличен 6 + Отличен 6</small>
+          </div>
         </div>
-        <div>
-          <h3>Спец. резултати</h3>
-          <div id="specialInputs" class="mini-grid"></div>
+        <div class="scale-box">
+          <h3>Точки от годишни оценки</h3>
+          <table class="scale-table">
+            <thead><tr><th>Оценка</th><th>Точки</th></tr></thead>
+            <tbody>
+              <tr><td>Отличен 6</td><td>50</td></tr>
+              <tr><td>Много добър 5</td><td>39</td></tr>
+              <tr><td>Добър 4</td><td>26</td></tr>
+              <tr><td>Среден 3</td><td>15</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
+      <p class="formula-note">Формула: Общ бал = БЕЛ × коеф. БЕЛ + МАТ × коеф. МАТ + точки от 1-ва годишна оценка + точки от 2-ра годишна оценка.</p>
     </section>
 
-    <section class="card" aria-labelledby="program-title">
-      <div class="section-heading">
-        <h2 id="program-title">Топ 10 паралелки, в които се покрива минималният бал</h2>
-        <label class="inline-control">Филтър по квоти
-          <select id="quotaFilter">
-            <option value="all" selected>Всички</option>
-            <option value="quotas">Само с квоти</option>
-            <option value="noQuotas">Само без квоти</option>
-          </select>
-        </label>
+    <section class="card exact-admission" aria-labelledby="programs-title">
+      <h2 id="programs-title">Топ 10 паралелки според точния бал</h2>
+      <p class="section-intro">Този списък използва формулата за балообразуване за всяка паралелка от системата на МОН Инфоприем и минималните балове от таблицата на РУО София към дата 14.07.2026 г.</p>
+      <div class="quota-radio" role="radiogroup" aria-label="Филтър по квоти">
+        <label><input type="radio" name="quotaFilter" value="all" checked /> Всички</label>
+        <label><input type="radio" name="quotaFilter" value="quotas" /> Само с квоти</label>
+        <label><input type="radio" name="quotaFilter" value="noQuotas" /> Само без квоти</label>
       </div>
+      <details class="diploma-details" open>
+        <summary>Годишни оценки и специални резултати за точния бал</summary>
+        <p class="hint">Оценките се превръщат в точки по скалата 6=50, 5=39, 4=26, 3=15. За паралелки със специален изпит/олимпиада попълнете съответния резултат; иначе остава 0.</p>
+        <div class="program-input-layout">
+          <div><h3>Годишни оценки</h3><div id="annualSubjectInputs" class="mini-grid"></div></div>
+          <div><h3>Спец. резултати</h3><div id="specialScoreInputs" class="mini-grid"></div></div>
+        </div>
+      </details>
       <div class="table-wrap">
-        <table>
+        <table class="program-table">
           <thead><tr><th>№</th><th>Училище</th><th>Паралелка</th><th>Квоти</th><th>Точен бал</th><th>Мин. бал</th><th>Разлика</th><th>Код</th></tr></thead>
-          <tbody id="programRows"></tbody>
+          <tbody id="programResultsBody"></tbody>
         </table>
       </div>
-      <p class="hint">Минималният бал е според избраната група: общо, момчета или момичета.</p>
     </section>
 
-    <section class="card" aria-labelledby="source-title">
-      <h2 id="source-title">Данни и ограничения</h2>
-      <ul>
-        <li>Разпределенията за НВО са групирани в интервали от 0.5 точки.</li>
-        <li>Паралелките и формулите са от системата на МОН <strong>Инфоприем</strong>; минималните балове са от <strong>таблицата на РУО София</strong> към дата 14.07.2026 г.</li>
-        <li>Резултатът показва дали текущият бал покрива публикувания минимален бал; не симулира желания, класиране по ред на предпочитанията или бъдещо движение.</li>
-      </ul>
+    <section class="card note">
+      <h2>Разчитане на справката</h2>
+      <p>Класирането е показано като диапазон, защото изходните данни са групирани в интервали от 0.5 точки. „Ученици с по-висок резултат“ означава броя ученици със строго по-висок резултат от избрания интервал.</p>
     </section>
+    <section class="card note">
+      <h2>Източник на данните</h2>
+      <p>Данните за баловете (успеваемост) са взети от <a href="https://ruo.mon.bg/sofia-grad/student-admission/podavane-na-zayavleniya-za-uchastie-v-1-etap/?fbclid=IwY2xjawSx5XBleHRuA2FlbQIxMQBzcnRjBmFwcF9pZBAyMjIwMzkxNzg4MjAwODkyAAEeikhBW2o1Je428M7jwYQyED-vYMX0Ev8wC5O_ie-ML8ZDTszAzdFtPuqTNFI_aem_QVELaS2OIgH3o71SX2aBag" target="_blank" rel="noopener noreferrer">публикация на РУО София-град</a> (1 юли 2026 г.).<br>
+        Паралелките и формулите са от системата на МОН <strong>Инфоприем</strong>; минималните балове са от <strong>таблицата на РУО София</strong> към дата 14.07.2026 г.<br>
+        За повече информация относно този калкулатор вижте <a href="https://github.com/MariaPeicheva/SofiaNVO-placement-calculator?tab=readme-ov-fil" target="_blank" rel="noopener noreferrer">тук</a>.
+      </p>
+    </section>
+
   </main>
   <script src="app.js"></script>
 </body>
