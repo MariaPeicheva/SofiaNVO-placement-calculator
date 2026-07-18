@@ -100,20 +100,23 @@
     </section>
 
     <section class="card exact-admission" aria-labelledby="programs-title">
-      <h2 id="programs-title">Топ 10 паралелки според точния бал</h2>
-      <p class="section-intro">Този списък използва формулата за балообразуване за всяка паралелка от системата на МОН Инфоприем и минималните балове от таблицата на РУО София към дата 14.07.2026 г.</p>
-      <div class="student-gender-radio" role="radiogroup" aria-label="Пол на ученика" title="Полът се използва само при паралелки с квоти, където има отделни минимални балове за момчета и момичета.">
-        <span>Пол:</span>
-        <label><input type="radio" name="studentGender" value="boys" checked /> М</label>
-        <label><input type="radio" name="studentGender" value="girls" /> Ж</label>
+      <h2 id="programs-title">Класиране в топ 10 паралелки</h2>
+      <p class="section-intro">Списъкът по-долу използва формулата за балообразуване за всяка паралелка от системата на МОН Инфоприем и минималните балове от таблицата на РУО София за 1-во класиране към дата 14.07.2026 г.</p>
+      <p class="hint disclaimer">Важно: данните и минималните балове могат да се променят при следващите класирания.</p>
+      <div class="filter-panel" aria-label="Филтри за паралелките">
+        <div class="segmented-group" role="radiogroup" aria-label="Пол на ученика" title="Полът се използва само при паралелки с квоти, където има отделни минимални балове за момчета и момичета.">
+          <span class="segmented-title">Пол</span>
+          <label><input type="radio" name="studentGender" value="boys" checked /><span>М</span></label>
+          <label><input type="radio" name="studentGender" value="girls" /><span>Ж</span></label>
+        </div>
+        <div class="segmented-group wide" role="radiogroup" aria-label="Филтър по квоти">
+          <span class="segmented-title">Паралелки</span>
+          <label><input type="radio" name="quotaFilter" value="all" checked /><span>Всички</span></label>
+          <label><input type="radio" name="quotaFilter" value="quotas" /><span>С квоти</span></label>
+          <label><input type="radio" name="quotaFilter" value="noQuotas" /><span>Без квоти</span></label>
+        </div>
       </div>
-      <p class="hint gender-help">Полът се използва само за паралелки с квоти; за паралелки без квоти се сравнява с общия минимален бал.</p>
-      <div class="quota-radio" role="radiogroup" aria-label="Филтър по квоти">
-        <label><input type="radio" name="quotaFilter" value="all" checked /> Всички</label>
-        <label><input type="radio" name="quotaFilter" value="quotas" /> Само с квоти</label>
-        <label><input type="radio" name="quotaFilter" value="noQuotas" /> Само без квоти</label>
-      </div>
-      <details class="diploma-details" open>
+      <details class="diploma-details">
         <summary>Въвеждане на оценки от специални предмети</summary>
         <p class="hint">Оценките се превръщат в точки по скалата 6=50, 5=39, 4=26, 3=15. За паралелки със специален изпит/олимпиада попълнете съответния резултат; иначе остава 0.</p>
         <div class="program-input-layout">
@@ -127,7 +130,7 @@
           <tbody id="programResultsBody"></tbody>
         </table>
       </div>
-      <button id="showMorePrograms" class="show-more" type="button">Покажи още</button>
+      <button id="showMorePrograms" class="show-more" type="button" onclick="handleShowMorePrograms(event)">Покажи още</button>
     </section>
 
     <section class="card note">
